@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.advweek4.R
+import com.example.advweek4.util.loadImage
 import com.example.advweek4.viewmodel.DetailViewModel
 import com.example.advweek4.viewmodel.ListViewModel
 import kotlinx.android.synthetic.main.fragment_student_detail.*
 import kotlinx.android.synthetic.main.fragment_student_list.*
+import kotlinx.android.synthetic.main.student_list_item.view.*
 
 /**
  * A simple [Fragment] subclass.
@@ -31,7 +33,7 @@ class StudentDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
-        viewModel.fetch()
+        viewModel.fetch(StudentDetailFragmentArgs.fromBundle(requireArguments()).playerid)
 
         observeViewModel()
     }
@@ -39,6 +41,9 @@ class StudentDetailFragment : Fragment() {
     private fun observeViewModel() {
         viewModel.studentLiveData.observe(viewLifecycleOwner){
             val student = it
+
+            imageDetailPhoto.loadImage(student.photoUrl, progressLoadDetail)
+
             editID.setText(student.id)
             editName.setText(student.name)
             editDOB.setText(student.dob)
